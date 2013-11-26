@@ -67,7 +67,7 @@ encode-single-pinyin = (proccess-zhuyin) ->
         else d = 'y' + d
       else if d.match /^(\-)/
         d = d.replace /(\-)/, 'y'
-    if is-rhymes d.0 or d.match /^(y|w|j|c|s|jh|ch|sh)(a|e|o|i|u)/ 
+    if is-rhymes d.0 or d.match /^(y|w|j|c|s|jh|ch|sh|r|z)(a|e|o|i|u)/ 
       rhyme = if is-rhymes d.0 => d.0
               else if d.match /^(jh|ch|sh)/ => d.2
               else => d.1
@@ -115,4 +115,6 @@ encode-multi-pinyin = (zhuyins) ->
 #console.log encode-single-pinyin decode-single-zhuyin \ㄧㄣ
 #console.log encode-single-pinyin decode-single-zhuyin \ㄕˋ
 #console.log encode-single-pinyin decode-single-zhuyin \ㄓㄤˇ
+console.log encode-single-pinyin decode-single-zhuyin \ㄗˋ
 console.log encode-multi-pinyin split-multi-zhuyin 'ㄅㄨˋ ㄧㄣ ㄧ ㄕˋ ㄅㄨˋ ㄓㄤˇ ㄧ ㄓˋ'
+console.log encode-multi-pinyin split-multi-zhuyin 'ㄧ ㄗˋ ㄔㄤˊ ㄕㄜˊ ㄓㄣˋ'
