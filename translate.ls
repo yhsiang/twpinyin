@@ -19,18 +19,22 @@ is-symbol = (s) ->
   return true if s is '˙' or s is 'ˊ' or s is 'ˇ' or s is 'ˋ'
   return false
 
-decode-zhuyin = (zhuyin) ->  
+decode-single-zhuyin = (zhuyin) ->  
   result = []
   tmp = ''
+  if zhuyin[(zhuyin.length)-1].match /(˙|ˊ|ˇ|ˋ)/
+    last-pos = (zhuyin.length)-2
+  else
+    last-pos = zhuyin.length - 1
   for z, i in zhuyin
     if z is 'ㄧ' or z is 'ㄨ' or z is 'ㄩ' 
-      if i < (zhuyin.length)-1 and !is-symbol zhuyin[i+1] 
+      if i is last-pos - 1 and !is-symbol zhuyin[i+1] 
         tmp = z + zhuyin[i+1] 
       else 
         tmp = z 
     if tmp.length is 0 and zhuyin-mapping[z]
       result.push zhuyin-mapping[z]
-    else if i is (zhuyin.length)-1 and tmp.length > 0
+    else if i is last-pos and tmp.length > 0
       if tmp is 'ㄧㄛ' or tmp is 'ㄧㄞ' =>
         result.push zhuyin-mapping[tmp]+zhuyin-mapping[z]
       else if tmp isnt z and !is-symbol z => result.push zhuyin-mapping[tmp]
@@ -47,7 +51,7 @@ encode-pinyin = (proccess-zhuyin) ->
   [ ...proccess, tone] = proccess-zhuyin
   replaced = ''
   for d, i in proccess
-    if is-consonant d.0 and decode-zhuyin.length is 2
+    if is-consonant d.0 and decode-single-zhuyin.length is 2
       d += 'ih' if d is 'jh' or d is 'ch' or d is 'sh' or d is 'r' or d is 'z' or d is 'c' or d is 's'
     if is-rhymes d.0 and i is 0
       if d.match /^ua/
@@ -65,10 +69,26 @@ encode-pinyin = (proccess-zhuyin) ->
     replaced += d
   return replaced
 
-console.log encode-pinyin decode-zhuyin \ㄧㄚ
-console.log encode-pinyin decode-zhuyin \ㄉㄧㄚ
-console.log encode-pinyin decode-zhuyin \ㄤˇ
-console.log encode-pinyin decode-zhuyin \ㄇㄥˊ
-console.log encode-pinyin decode-zhuyin \ㄧㄛ
-console.log encode-pinyin decode-zhuyin \ㄒㄧ
-console.log encode-pinyin decode-zhuyin \ㄐㄧˋ
+split-multi-zhuyin = (multi-str) ->
+  single = ''
+  result = []
+  sliced = multi-str / /(˙|ˊ|ˇ|ˋ)/
+  for s, i in sliced
+    single += s
+    if is-symbol s or i is (sliced.length)-1
+      result.push single
+      single = ''
+  return result
+
+
+console.log encode-pinyin decode-single-zhuyin \ㄧㄚ
+console.log encode-pinyin decode-single-zhuyin \ㄉㄧㄚ
+console.log encode-pinyin decode-single-zhuyin \ㄤˇ
+console.log encode-pinyin decode-single-zhuyin \ㄇㄥˊ
+console.log encode-pinyin decode-single-zhuyin \ㄧㄛ
+console.log encode-pinyin decode-single-zhuyin \ㄒㄧ
+console.log encode-pinyin decode-single-zhuyin \ㄐㄧˋ
+console.log encode-pinyin decode-single-zhuyin \ㄆㄧㄥˊ
+z = split-multi-zhuyin 'ㄆㄧㄥˊ ㄒㄧ'
+for i in z 
+  console.log encode-pinyin decode-single-zhuyin i 
