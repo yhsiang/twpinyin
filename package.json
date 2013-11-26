@@ -1,0 +1,21 @@
+{
+  "name": "twpinyin",
+  "version": "0.0.1",
+  "description": "convert zhuyin to twpinyin",
+  "main": "index.js",
+  "dependencies": {
+    "LiveScript": "~1.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "keywords": [
+    "twpinyin",
+    "zhuyin",
+    "pinyin"
+  ],
+  "author": "Yuanhsiang Cheng",
+  "license": "MIT"
+}
