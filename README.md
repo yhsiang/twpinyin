@@ -1,5 +1,6 @@
 # Convert Zhuyin to twPinyin (通用拼音)
 
+## 目前完成功能
 ```
 // 將注音轉成ㄧ般拼音 
 decode-zhuyin 'ㄧㄚ'
@@ -9,4 +10,9 @@ decode-zhuyin 'ㄧㄚ'
 encode-pinyin ['ya', '1']
 // ya1 -> yā
 
+```
+
+## 使用方法 Usage
+```
+$ lsc translate.ls
 ```
