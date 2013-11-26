@@ -15,19 +15,25 @@ is-consonant = (c) ->
   return true if c.match /[a-z]/ and !is-rhymes c
   return false
 
+is-symbol = (s) ->
+  return true if s is '˙' or s is 'ˊ' or s is 'ˇ' or s is 'ˋ'
+  return false
+
 decode-zhuyin = (zhuyin) ->  
   result = []
   tmp = ''
   for z, i in zhuyin
-    if z is 'ㄧ' or z is 'ㄨ' or z is 'ㄩ'
-      tmp = z + zhuyin[i+1]
+    if z is 'ㄧ' or z is 'ㄨ' or z is 'ㄩ' 
+      if i < (zhuyin.length)-1 and !is-symbol zhuyin[i+1] 
+        tmp = z + zhuyin[i+1] 
+      else 
+        tmp = z 
     if tmp.length is 0 and zhuyin-mapping[z]
       result.push zhuyin-mapping[z]
     else if i is (zhuyin.length)-1 and tmp.length > 0
       if tmp is 'ㄧㄛ' or tmp is 'ㄧㄞ' =>
         result.push zhuyin-mapping[tmp]+zhuyin-mapping[z]
-      else => result.push zhuyin-mapping[tmp]
-
+      else if tmp isnt z and !is-symbol z => result.push zhuyin-mapping[tmp]
     if i is (zhuyin.length)-1
      switch z
      case '˙' then result.push '0'
@@ -51,7 +57,7 @@ encode-pinyin = (proccess-zhuyin) ->
       else if d.match /^(i|\-)/
         d = d.replace /(i|\-)/, 'y'
 
-    if is-rhymes d.0 or d.0.match /^(y|w)/
+    if is-rhymes d.0 or d.0.match /^(y|w|j|c|s)/
       rhyme = if is-rhymes d.0 => d.0
               else => d.1
       r = pinyin-tone.(rhyme).(tone) 
@@ -64,3 +70,5 @@ console.log encode-pinyin decode-zhuyin \ㄉㄧㄚ
 console.log encode-pinyin decode-zhuyin \ㄤˇ
 console.log encode-pinyin decode-zhuyin \ㄇㄥˊ
 console.log encode-pinyin decode-zhuyin \ㄧㄛ
+console.log encode-pinyin decode-zhuyin \ㄒㄧ
+console.log encode-pinyin decode-zhuyin \ㄐㄧˋ
